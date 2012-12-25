@@ -8,7 +8,7 @@
 import sys, string, arcgisscripting, os, traceback, shutil, re
 
 # Create the Geoprocessor object
-gp = arcgisscripting.create(93)
+gp = arcgisscripting.create(9.3)
 
 # Set overwrite 
 gp.overwriteoutput = 1
