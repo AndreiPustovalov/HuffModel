@@ -414,7 +414,7 @@ try:
             cur = gp.updatecursor(r"in_memory\tbl", "Total_" + cost + " = 0")
             row = cur.next()
             while row:
-				row.__dict__["Total_" + cost] = row.__dict__["Total_" + cost] + .1
+                row.__dict__["Total_" + cost] = row.__dict__["Total_" + cost] + .1
                 cur.Updaterow(row)
                 row = cur.next()
             del cur
