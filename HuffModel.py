@@ -333,7 +333,7 @@ try:
 ######################################################################################################################################################
     
     if distances.lower() == 'true':
-        gp.SetProgressor("default", "Calculating travel time impedance from Origin Locations to Store Destinations......", 0, 1, 1)
+        gp.SetProgressor("default", "Calculating travel impedance from Origin Locations to Store Destinations......", 0, 1, 1)
 
         # Figure out Network Dataset attributes for use in Making the OD Cost Matrix
         usetime = ""
@@ -371,7 +371,7 @@ try:
 
         # Process: Solve Origin Destination matrix... 
         gp.Solve_na("OD", "SKIP")
-        gp.addmessage("Finished calculating travel time impedance from origin locations to stores.")
+        gp.addmessage("Finished calculating travel impedance ("+cost+") from origin locations to stores.")
         gp.savetolayerfile_management("OD", outfolder + "\\ODafter.lyr")
 
     # If Network Analyst is not available, calculate distances that are straight line
