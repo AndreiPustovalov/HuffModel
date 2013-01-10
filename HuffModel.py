@@ -515,11 +515,11 @@ try:
             gp.SetProgressorPosition()
 
 		# Add distance to stores	
-		if distances.lower() == 'true':
-			gp.AddField_management("in_memory" + os.sep + tblname, str(storename) + "_Total_" + cost , "FLOAT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
-			gp.CalculateField_management("in_memory" + os.sep + tblname, str(storename) + "_Total_" + cost, "[Total_" + cost + "]")
+        if distances.lower() == 'true':
+            gp.AddField_management("in_memory" + os.sep + tblname, str(storename) + "_Total_" + cost , "FLOAT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
+            gp.CalculateField_management("in_memory" + os.sep + tblname, str(storename) + "_Total_" + cost, "[Total_" + cost + "]")
             gp.joinfield(r"in_memory\bg", "BID", "in_memory" + os.sep + tblname, "BID", str(storename) + "_Total_" + cost)
-			
+
         # Delete in memory table to free up memory
         gp.delete_management(r"in_memory" + os.sep + tblname)
         
