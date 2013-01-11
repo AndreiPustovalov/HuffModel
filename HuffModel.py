@@ -558,6 +558,15 @@ try:
             gp.delete(outputgdb + "kriging_" + str(storename))
             gp.SetProgressorPosition()
            
+            # Process: Create surface from store sales values (interpolate with Kriging)
+            field = str(storename) + "_sales"
+            output = outputgdb + "sales_kriging_" + str(storename)
+            props = "Spherical " + str(expectedMeanDist)
+            gp.kriging_sa(r"in_memory\bg", field, output, props)
+            gp.SingleOutputMapAlgebra_sa("Int([" + outputgdb + "sales_kriging_" + str(storename) + "])",outputgdb + str(storename) + "_SalesSurface","#")
+            gp.delete(outputgdb + "sales_kriging_" + str(storename))
+            gp.SetProgressorPosition()
+
         gp.extent = ""
         
         # Exit the while loop
