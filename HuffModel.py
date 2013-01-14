@@ -529,7 +529,7 @@ try:
         expectedMeanDist = 1.0 / (2.0 * ((num / float(area))**0.5))
         
         # Generate surfaces if user desires
-        if surfaces.lower() == 'true':
+        if surfaces.lower() == 'true' and (str(storename) in ["a","d"]):
             gp.addmessage("Generating " + str(storename) + " Probability Surface")
             desc = gp.describe(studyarea)
             extent = desc.Extent
