@@ -39,7 +39,7 @@ try:
     outputgdb = outfolder + "\\output.gdb" + os.sep
     gp.SetProgressorPosition()
 
-    ingdb = store_attr + os.sep
+    ingdb = streets + os.sep
 #    cur = gp.SearchCursor(stores)
 #    row = cur.Next()
 
