@@ -53,7 +53,7 @@ try:
     
     while row :
         # Generate surfaces if user desires
-        if True:
+        if str(storename) in ["a","d"]:
             gp.addmessage("Generating " + str(storename) + " Probability Surface")
             desc = gp.describe(studyarea)
             extent = desc.Extent
