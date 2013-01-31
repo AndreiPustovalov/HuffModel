@@ -52,6 +52,7 @@ try:
     row = cur.Next()
     
     while row :
+        storename = row.GetValue(store_name)
         # Generate surfaces if user desires
         if str(storename) in ["a","d"]:
             gp.addmessage("Generating " + str(storename) + " Probability Surface")
