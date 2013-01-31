@@ -52,6 +52,7 @@ try:
     row = cur.Next()
     
     while row :
+        gp.SetProgressor("step", "Generating surfaces..." , 0, 10, 1) 
         storename = row.GetValue(store_name)
         # Generate surfaces if user desires
         if str(storename) in ["a","d"]:
@@ -81,7 +82,6 @@ try:
             gp.kriging_sa(ingdb + fc_name, field, output, props)
             gp.SingleOutputMapAlgebra_sa("Int([" + outputgdb + "kriging_" + str(storename) + "] * 100)",outputgdb + str(storename) + "_ProbSurface","#")
             gp.delete(outputgdb + "kriging_" + str(storename))
-            gp.SetProgressorPosition()
            
             # Process: Create surface from store sales values (interpolate with Kriging)
             field = str(storename) + "_sales"
@@ -90,9 +90,9 @@ try:
             gp.kriging_sa(ingdb + fc_name, field, output, props)
             gp.SingleOutputMapAlgebra_sa("Int([" + outputgdb + "sales_kriging_" + str(storename) + "])",outputgdb + str(storename) + "_SalesSurface","#")
             gp.delete(outputgdb + "sales_kriging_" + str(storename))
-            gp.SetProgressorPosition()
+        gp.SetProgressorPosition()
             
-            row = cur.Next()
+        row = cur.Next()
     gp.addmessage(" -- Process Complete -- ")
 
 # Finish traceback Try-Except statement:
