@@ -32,7 +32,7 @@ try:
     surfaces = gp.getparameterastext(13)
 
     # Establish 'step' progressor settings
-    gp.SetProgressor("step", "Checking inputs against parameter requirements..." , 0, 9, 1) 
+    gp.SetProgressor("step", "Checking inputs against parameter requirements..." , 0, 4, 1) 
 
     # Process: Make output file gdb
     gp.createfilegdb(outfolder, "output.gdb")
@@ -40,8 +40,43 @@ try:
     gp.SetProgressorPosition()
 
     ingdb = outfolder + os.sep
-#    cur = gp.SearchCursor(stores)
-#    row = cur.Next()
+
+    # If study area contains more than one polygon, dissolve it
+    numstudyarea = int(gp.getcount_management(studyarea).getoutput(0))
+    if numstudyarea > 1:
+        gp.dissolve_management(studyarea, r"in_memory\studyarea")
+        cur = gp.searchcursor(r"in_memory\studyarea")
+    else:        
+        cur = gp.searchcursor(studyarea)
+    descunit = gp.describe(studyarea)
+    sr = descunit.spatialreference
+    row = cur.next()
+    area = 0
+    # Process: Calculate area of study area
+    while row:
+        feat = row.shape
+        area = feat.Area
+        if sr.linearunitname == "Foot_US":
+            if area / 5318313.2 > 500: # max number of points
+                pointnum = 500
+            elif area / 5318313.2 < 100: # min number of points
+                pointnum = 100
+            else:
+                pointnum = area / 5318313.2
+                    
+        elif sr.linearunitname == "Meter":
+            if area / 494089.52 > 500: # max number of points
+                pointnum = 500
+            elif area / 494089.52 < 100: # min number of points
+                pointnum = 100
+            else:
+                pointnum = area / 494089.52
+        else:
+            gp.adderror("Your study area feature class does not have a projected coordinate system.  Please project your data or use another data source.")
+            sys.exit()
+        row = cur.next()
+    
+    gp.SetProgressorPosition()
 
     # Process: Summary Statistics(make list of store names)
     gp.Statistics_analysis(stores, r"in_memory\st_names", str(store_name) + " FIRST", str(store_name))
@@ -51,6 +86,12 @@ try:
     cur = gp.SearchCursor(r"in_memory\st_names")
     row = cur.Next()
     
+     # Determine the expected mean distance between input origin locations
+    num1 = gp.getcount_management(ingdb + fc_name)
+    num = int(num1.getoutput(0))
+    expectedMeanDist = 1.0 / (2.0 * ((num / float(area))**0.5))
+    gp.SetProgressorPosition()
+
     while row :
         gp.SetProgressor("step", "Generating surfaces..." , 0, 10, 1) 
         storename = row.GetValue(store_name)
