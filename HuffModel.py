@@ -91,6 +91,8 @@ try:
             gp.SingleOutputMapAlgebra_sa("Int([" + outputgdb + "sales_kriging_" + str(storename) + "])",outputgdb + str(storename) + "_SalesSurface","#")
             gp.delete(outputgdb + "sales_kriging_" + str(storename))
             gp.SetProgressorPosition()
+            
+            row = cur.Next()
     gp.addmessage(" -- Process Complete -- ")
 
 # Finish traceback Try-Except statement:
