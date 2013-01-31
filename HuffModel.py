@@ -32,7 +32,7 @@ try:
     surfaces = gp.getparameterastext(13)
 
     # Establish 'step' progressor settings
-    gp.SetProgressor("step", "Checking inputs against parameter requirements..." , 0, 4, 1) 
+    gp.SetProgressor("step", "Checking inputs against parameter requirements..." , 0, 7, 1) 
 
     # Process: Make output file gdb
     gp.createfilegdb(outfolder, "output.gdb")
@@ -78,6 +78,16 @@ try:
     
     gp.SetProgressorPosition()
 
+    gp.FeatureToPoint_management(ingdb + fc_name, r"in_memory\bg", "INSIDE")
+    gp.SetProgressorPosition()
+    gp.AddField_management(r"in_memory\bg", "BID", "SHORT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
+    gp.SetProgressorPosition()
+    
+    # Process: Calculate ID field for block groups
+    desc = gp.describe(r"in_memory\bg")
+    gp.CalculateField_management(r"in_memory\bg", "BID", "[" + desc.OIDFieldName + "]")
+    gp.SetProgressorPosition()
+
     # Process: Summary Statistics(make list of store names)
     gp.Statistics_analysis(stores, r"in_memory\st_names", str(store_name) + " FIRST", str(store_name))
     gp.SetProgressorPosition()
@@ -87,7 +97,7 @@ try:
     row = cur.Next()
     
      # Determine the expected mean distance between input origin locations
-    num1 = gp.getcount_management(ingdb + fc_name)
+    num1 = gp.getcount_management(r"in_memory\bg")
     num = int(num1.getoutput(0))
     expectedMeanDist = 1.0 / (2.0 * ((num / float(area))**0.5))
     gp.SetProgressorPosition()
@@ -120,7 +130,7 @@ try:
             field = str(storename) + "_prob"
             output = outputgdb + "kriging_" + str(storename)
             props = "Spherical " + str(expectedMeanDist)
-            gp.kriging_sa(ingdb + fc_name, field, output, props)
+            gp.kriging_sa(r"in_memory\bg", field, output, props)
             gp.SingleOutputMapAlgebra_sa("Int([" + outputgdb + "kriging_" + str(storename) + "] * 100)",outputgdb + str(storename) + "_ProbSurface","#")
             gp.delete(outputgdb + "kriging_" + str(storename))
            
@@ -128,7 +138,7 @@ try:
             field = str(storename) + "_sales"
             output = outputgdb + "sales_kriging_" + str(storename)
             props = "Spherical " + str(expectedMeanDist)
-            gp.kriging_sa(ingdb + fc_name, field, output, props)
+            gp.kriging_sa(r"in_memory\bg", field, output, props)
             gp.SingleOutputMapAlgebra_sa("Int([" + outputgdb + "sales_kriging_" + str(storename) + "])",outputgdb + str(storename) + "_SalesSurface","#")
             gp.delete(outputgdb + "sales_kriging_" + str(storename))
         gp.SetProgressorPosition()
