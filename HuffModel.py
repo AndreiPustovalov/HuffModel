@@ -345,6 +345,7 @@ try:
         attributes = desc.attributes
         attributes.reset()
         attribute = attributes.next()
+        restrictions = ''
         while attribute:
             if attribute.UsageType == "Cost":
                 if attribute.Units in ["Days", "Hours", "Minutes", "Seconds"]:
@@ -353,15 +354,19 @@ try:
                     uselength = attribute.Name
             if attribute.UsageType == "Heirarchy":
                 useheirarchy = "USE_HIERARCHY"
+            if attribute.UsageType == "Restriction":
+                if restrictions != '':
+                    restrictions = restrictions + ';'
+                restrictions = restrictions + attribute.Name
             attribute = attributes.next()
-
+        gp.addmessage('Restrictions: ' + restrictions)
         if usetime != "":
             cost = usetime            
         else:
             cost = uselength
             
         # Process: Make OD Cost Matrix Layer...
-        gp.MakeODCostMatrixLayer_na(streets, "OD", cost, "", "", cost, "ALLOW_UTURNS", "OneWay", useheirarchy, "", "NO_LINES")
+        gp.MakeODCostMatrixLayer_na(streets, "OD", cost, "", "", cost, "ALLOW_UTURNS", "OneWay;"+restrictions, useheirarchy, "", "NO_LINES")
 
         # Add Origin Locations to OD Matrix
         gp.addlocations_na("OD", "Origins", r"in_memory\bg", "Name Name #", "5000 Meters", "", "trline SHAPE;nd_Junctions NONE", "MATCH_TO_CLOSEST", "APPEND", "NO_SNAP", "5 Meters")
