@@ -361,13 +361,13 @@ try:
             cost = uselength
             
         # Process: Make OD Cost Matrix Layer...
-        gp.MakeODCostMatrixLayer_na(streets, "OD", cost, "", "", cost, "ALLOW_UTURNS", "OneWay", useheirarchy, "", "STRAIGHT_LINES")
+        gp.MakeODCostMatrixLayer_na(streets, "OD", cost, "", "", cost, "ALLOW_UTURNS", "OneWay", useheirarchy, "", "NO_LINES")
 
         # Add Origin Locations to OD Matrix
-        gp.addlocations_na("OD", "Origins", r"in_memory\bg", "Name BID #;CurbApproach # 0;TargetDestinationCount # #", "1000 Miles", "", "trline SHAPE;nd_Junctions NONE", "MATCH_TO_CLOSEST", "APPEND", "NO_SNAP", "5 Meters")
+        gp.addlocations_na("OD", "Origins", r"in_memory\bg", "Name Name #", "5000 Meters", "", "trline SHAPE;nd_Junctions NONE", "MATCH_TO_CLOSEST", "APPEND", "NO_SNAP", "5 Meters")
        
         # Add Destination Locations to OD Matrix
-        gp.addlocations_na("OD", "Destinations", r"in_memory\st", "Name SID #;CurbApproach # 0;TargetDestinationCount # #", "1000 Miles", "", "trline SHAPE;nd_Junctions NONE", "MATCH_TO_CLOSEST", "APPEND", "NO_SNAP", "5 Meters")
+        gp.addlocations_na("OD", "Destinations", r"in_memory\st", "Name Name #;CurbApproach # 0", "5000 Meters", "", "trline SHAPE;nd_Junctions NONE", "MATCH_TO_CLOSEST", "APPEND", "NO_SNAP", "5 Meters")
 
         # Process: Solve Origin Destination matrix... 
         gp.Solve_na("OD", "SKIP")
