@@ -332,6 +332,10 @@ try:
 ######################################################################################################################################################
 ######################################################################################################################################################
     
+    gp.SetProgressor("default", "Saving centroid points from input origin locations......", 0, 1, 1)
+    gp.copyfeatures(r"in_memory\bg", outputgdb + "bg_points")
+    gp.SetProgressorposition()
+    
     if distances.lower() == 'true':
         gp.SetProgressor("default", "Calculating travel impedance from Origin Locations to Store Destinations......", 0, 1, 1)
 
