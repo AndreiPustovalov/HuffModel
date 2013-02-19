@@ -332,8 +332,10 @@ try:
 ######################################################################################################################################################
 ######################################################################################################################################################
     
-    gp.SetProgressor("default", "Saving centroid points from input origin locations......", 0, 1, 1)
+    gp.SetProgressor("default", "Saving centroid points from input origin locations......", 0, 1, 2)
     gp.copyfeatures(r"in_memory\bg", outputgdb + "bg_points")
+    gp.SetProgressorposition()
+    gp.SaveSettings(outfolder + "\\settings.xml")
     gp.SetProgressorposition()
     
     if distances.lower() == 'true':
