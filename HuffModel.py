@@ -672,14 +672,14 @@ try:
 
         # Get the length of the longest store name
         for field in fieldlist:
-            length = len(str(field))
+            length = len(field.Name)
             if length >= fieldNameLength:
                 fieldNameLength = length
 
         #add field for indicating the store with the highest sales value
         gp.addfield(fc_name, "Market" , "TEXT", "", "", fieldNameLength - 5)
             
-        rows = gp.UpdateCursor(fc_name)
+        rows = gp.UpdateCursor(outputgdb + str(fc_name))
         row = rows.Next()
 
         while row:
