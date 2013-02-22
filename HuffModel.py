@@ -297,7 +297,7 @@ try:
 
     # Process: Create centroid points from input origin locations
     else:
-        gp.FeatureToPoint_management(blockgroups, r"in_memory\bg", "INSIDE")
+        gp.FeatureToPoint_management(blockgroups, r"in_memory\bg", "CENTROID")
         gp.SetProgressorPosition()
         # Process: clear attributes in block group points layer by deleting
         fields = gp.listfields(r"in_memory\bg", "*")
